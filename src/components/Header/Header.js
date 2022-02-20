@@ -1,7 +1,7 @@
 import { Form, Container, FormControl, Button } from "react-bootstrap";
 import Filter from "./Filter.js";
 
-function Header({ filtersetter, searchSetter, setCanSearch}) {
+function Header({ filtersetter, searchSetter, postsPerPage }) {
   return (
     <Container style={{ marginTop: "2%" }}>
       <Form
@@ -27,6 +27,7 @@ function Header({ filtersetter, searchSetter, setCanSearch}) {
       </Form>
       <Filter
         filterset={filtersetter}
+        postsPerPage={postsPerPage}
         list={[
           "All",
           "Science",

@@ -15,12 +15,19 @@ function Base() {
   const [data, setData] = useState(null);
   const [filters, setFilters] = useState("All");
   const [searchItem, setSearchItem] = useState("");
+  const [currPage, setCurrPage] = useState(1);
+  const [totalPosts, setTotalPosts] = useState(-1);
+  const [postsPerPage, setPostsPerPage] = useState(10);
   const navigate = useNavigate();
   const authContext = useContext(AuthContext);
 
+  const paginate = (pageNumber) => {
+    setCurrPage(pageNumber);
+  };
+
   useEffect(() => {
     setData(null);
-    console.log(authContext);
+    // console.log(authContext);
     if (authContext.isLoggedIn === false) {
       navigate("/register", {replace: true});
     } else {
@@ -31,18 +38,20 @@ function Base() {
               "book/" +
               (filters.length === 0 ? "All" : filters) +
               (searchItem.length ? "&search=" + searchItem : "") +
-              "&0&5",
+              "&"+String(currPage)+"&"+postsPerPage,
           })
         )
         .then((res) => {
           console.log(res.data);
-          setData(res.data);
+          setData(res.data.results);
+          setTotalPosts(res.data.total);
         });
     }
-  }, [filters, searchItem, authContext, navigate]);
+  }, [filters, searchItem, authContext, navigate, currPage, postsPerPage]);
+
   return (
     <div className="App">
-      <Header filtersetter={setFilters} searchSetter={setSearchItem} />
+      <Header filtersetter={setFilters} searchSetter={setSearchItem} postsPerPage={setPostsPerPage}/>
       <Container fluid>
         <Row style={{ "align-items": "center", "justify-content": "center" }}>
           {data === null ? (
@@ -56,7 +65,7 @@ function Base() {
           ) : data.length > 0 ? (
             <>
               {data.map((book) => {
-                console.log("data", book);
+                // console.log("data", book);
                 return <BookCard bookDetails={book} />;
               })}
             </>
@@ -65,7 +74,7 @@ function Base() {
           )}
         </Row>
       </Container>
-      <Paged />
+      {totalPosts >= 0 && <Paged postsPerPage={postsPerPage} totalPosts={totalPosts} paginate={paginate} currPage={currPage}/>}
       <Footer />
     </div>
   );

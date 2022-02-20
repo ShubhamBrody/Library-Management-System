@@ -8,7 +8,7 @@ function BookCard(props) {
   const [modalShow, setModalShow] = useState(false);
   const [modalBookDetails, setModalBookDetails] = useState(false);
   var cut = props.bookDetails['bookName'].length > 21 ? 25 : 40;
-  console.log("Inbook", props.bookDetails);
+  // console.log("Inbook", props.bookDetails);
   return (
     <Card
       style={{width: "16rem", height: "30rem", margin: props.margin ? props.margin : "1rem" }}
