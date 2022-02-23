@@ -12,28 +12,34 @@ function Login() {
   const [error, setError] = useState("");
   const navigate = useNavigate();
   const authctx = useContext(AuthContext);
-  var numberOfElements = 3;
+
+  var numberOfElements = 2;
   const loginhandler = (arr) => {
     const data = {
       email: arr[0],
       password: arr[1],
-      isAdmin: false,
+      isAdmin: arr[2],
     };
     console.log("data", data);
+    console.log(arr);
     axios
-      .post(MyBackend({ work: "login" }), data)
+      .post(MyBackend({ work: "login/" }), data)
       .then((d) => {
-        console.log("This is d : ", d);
-        authctx.login(data.isAdmin, d.data.username);
-        navigate("/");
+        authctx.login(d.data.isAdmin, d.data.user);
+        window.localStorage.setItem("LMS_LOGINTIME", new Date());
+        window.localStorage.setItem("LMS_USER", JSON.stringify(d.data.user));
+        window.localStorage.setItem("LMS_ISADMIN", d.data.isAdmin);
+        navigate('/')
       })
       .catch((error) => {
+        console.log("This is error : ", error);
         error.response
           ? setError(error.response.data)
           : setError("ServerError");
         setErroroccured(true);
       });
   };
+  
   return (
     <Container>
       <div
@@ -62,6 +68,7 @@ function Login() {
             arr.push(e.target[i].value);
             i++;
           }
+          arr.push(e.target[i].checked);
           setDetails(arr);
           loginhandler(arr);
           // setErroroccured(true);

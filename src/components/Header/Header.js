@@ -31,7 +31,7 @@ function Header({ filtersetter, searchSetter, postsPerPage }) {
         list={[
           "All",
           "Science",
-          "Programming",
+          "Mystery",
           "Adventure",
           "Sci-Fi",
           "Horror",

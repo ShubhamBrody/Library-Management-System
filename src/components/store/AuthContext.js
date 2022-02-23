@@ -1,8 +1,7 @@
 import React, {useState} from "react";
 
 const AuthContext = React.createContext({
-    username: "",
-    password: "",
+    user: null,
     isLoggedIn: false,
     isAdmin: false,
 })
@@ -10,19 +9,18 @@ const AuthContext = React.createContext({
 export const AuthContextProvider = (props) => {
     const [token, setToken] = useState(null);
     const [isAdmin, setIsAdmin] = useState(false);
-    const [username, setUsername] = useState(null);
-
+    const [user, setUser] = useState({});
     const isLoggedIn = !!token;
 
-    const login = (isAdmin, username) => {
+    const login = (isAdmin, user) => {
         setToken("12345");
+        setUser(user);
         setIsAdmin(isAdmin);
-        setUsername(username);
     }
 
     const logout = () => {
         setToken(null);
-        setUsername(null);
+        setUser(null);
         setIsAdmin(false);
     }
 
@@ -32,8 +30,7 @@ export const AuthContextProvider = (props) => {
         login: login,
         logout: logout,
         isAdmin: isAdmin,
-        setAdmin: setIsAdmin,
-        username: username,
+        user: user,
     }
     
     return <AuthContext.Provider value={contextValue}>{props.children}</AuthContext.Provider>

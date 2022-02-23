@@ -66,7 +66,7 @@ function Base() {
             <>
               {data.map((book) => {
                 // console.log("data", book);
-                return <BookCard bookDetails={book} />;
+                return <BookCard bookDetails={book} toshow={true} />;
               })}
             </>
           ) : (

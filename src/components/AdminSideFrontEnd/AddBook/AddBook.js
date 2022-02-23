@@ -9,9 +9,11 @@ import {
   Button,
 } from "react-bootstrap";
 import BookCard from "../../Books/BooksCard";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { MyBackend } from "../../Api/ApiLinkGen";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AuthContext from "../../store/AuthContext";
 
 function AddBook() {
   const [details, setDetails] = useState({
@@ -25,15 +27,16 @@ function AddBook() {
     rating: "",
     quantity: 0,
   });
-
+  const authContext = useContext(AuthContext);
+  const navigate = useNavigate();
   function base64giver(obj) {
     var file = obj[Object.keys(obj)[0]];
     new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.readAsDataURL(file);
       reader.onload = () => resolve(reader.result);
-      reader.onerror = error => reject(error);
-    }).then((data) => { 
+      reader.onerror = (error) => reject(error);
+    }).then((data) => {
       setDetails((prevdetails) => {
         return {
           ...prevdetails,
@@ -62,6 +65,12 @@ function AddBook() {
         console.log("Error Occured : ", error);
       });
   };
+
+  useEffect(() => {
+    if (!authContext.isAdmin) {
+      navigate("/", { replace: true });
+    }
+  }, [navigate, authContext]);
 
   return (
     <Container>
@@ -113,8 +122,8 @@ function AddBook() {
               <Form.Label>Provide Author Image : </Form.Label>
               <FormControl
                 id="inputter"
-                type="file"
-                placeholder="Author Picture"
+                type="text"
+                placeholder="Author Picture URL"
                 onChange={(val) =>
                   base64giver({ base64AuthorImage: val.target.files[0] })
                 }
@@ -123,8 +132,8 @@ function AddBook() {
             <FormGroup className="mb-3">
               <Form.Label>Provide Book Image : </Form.Label>
               <FormControl
-                type="file"
-                placeholder="Book Picture"
+                type="text"
+                placeholder="Book Picture URL"
                 onChange={(val) =>
                   base64giver({ base64BookImage: val.target.files[0] })
                 }

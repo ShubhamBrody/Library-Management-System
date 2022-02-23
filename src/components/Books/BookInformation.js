@@ -1,6 +1,7 @@
 import { Container, Row, Col, ProgressBar } from "react-bootstrap";
 
 function BookInformation({ bookDetails }) {
+  console.log(bookDetails);
   return (
     <Container fluid="md">
       <Row className="mb-4 flex-wrap">

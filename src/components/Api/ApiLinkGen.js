@@ -17,6 +17,6 @@ function IsBookPresent({isbn})
 function MyBackend({work})
 {
     console.log("work", work);
-    return 'http://192.168.0.115:5000/' + work;
+    return 'http://localhost:5000/' + work;
 }
 export {Nytimes, Openlibrary, IsBookPresent, MyBackend};
