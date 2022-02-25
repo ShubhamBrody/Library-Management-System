@@ -9,11 +9,9 @@ import {
   Button,
 } from "react-bootstrap";
 import BookCard from "../../Books/BooksCard";
-import { useState, useEffect, useContext } from "react";
+import { useState } from "react";
 import { MyBackend } from "../../Api/ApiLinkGen";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../../store/AuthContext";
 
 function AddBook() {
   const [details, setDetails] = useState({
@@ -27,24 +25,6 @@ function AddBook() {
     rating: "",
     quantity: 0,
   });
-  const authContext = useContext(AuthContext);
-  const navigate = useNavigate();
-  function base64giver(obj) {
-    var file = obj[Object.keys(obj)[0]];
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.readAsDataURL(file);
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = (error) => reject(error);
-    }).then((data) => {
-      setDetails((prevdetails) => {
-        return {
-          ...prevdetails,
-          ...{ [Object.keys(obj)[0]]: data },
-        };
-      });
-    });
-  }
 
   function handler(obj) {
     setDetails((prevdetails) => {
@@ -55,8 +35,8 @@ function AddBook() {
     });
   }
 
-  const addBookToDB = async () => {
-    await axios
+  const addBookToDB = () => {
+    axios
       .post(MyBackend({ work: "addbook" }), details)
       .then(() => {
         console.log("Successfully Added the book!!");
@@ -65,12 +45,6 @@ function AddBook() {
         console.log("Error Occured : ", error);
       });
   };
-
-  useEffect(() => {
-    if (!authContext.isAdmin) {
-      navigate("/", { replace: true });
-    }
-  }, [navigate, authContext]);
 
   return (
     <Container>
@@ -125,7 +99,7 @@ function AddBook() {
                 type="text"
                 placeholder="Author Picture URL"
                 onChange={(val) =>
-                  base64giver({ base64AuthorImage: val.target.files[0] })
+                  handler({ base64AuthorImage: val.target.files[0] })
                 }
               />
             </FormGroup>
@@ -135,7 +109,7 @@ function AddBook() {
                 type="text"
                 placeholder="Book Picture URL"
                 onChange={(val) =>
-                  base64giver({ base64BookImage: val.target.files[0] })
+                  handler({ base64BookImage: val.target.files[0] })
                 }
               />
             </FormGroup>

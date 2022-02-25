@@ -1,4 +1,4 @@
-import { Form, Button, Container, Alert } from "react-bootstrap";
+import { Form, Button, Container } from "react-bootstrap";
 import { useState } from "react";
 import ErrorOccured from "../Registration/ErrorOccured";
 import axios from "axios";
@@ -6,116 +6,179 @@ import { MyBackend } from "../Api/ApiLinkGen";
 import AuthContext from "../store/AuthContext";
 import { useContext } from "react";
 function BookOrderForm({ bookDetails }) {
-  const [value, setValue] = useState([]);
   const [erroroccured, setErroroccured] = useState(false);
+  const [variant, setVariant] = useState("danger");
   const [error, setError] = useState("");
   const authctx = useContext(AuthContext);
+  const [value, setValue] = useState({
+    email: authctx.user.email,
+    name: "",
+    addressLine1: "",
+    addressLine2: "",
+    city: "",
+    state: "",
+    zip: "",
+    country: "",
+    phone: "",
+    isbn: bookDetails.isbn,
+    bookReturnDate: "",
+    bookReturned: false,
+    bookReturnedDate: null,
+  });
 
   const dbUpdate = () => {
-    const data = {
-      email: authctx.user.email,
-      name: value[0],
-      addressLine1: value[1],
-      addressLine2: value[2],
-      city: value[3],
-      state: value[4],
-      zip: value[5],
-      country: value[6],
-      phone: value[7],
-      isbn: bookDetails.isbn,
-      bookReturnDate: new Date(value[8]),
-      bookReturned: false,
-      bookReturnedDate: null,
-    };
     axios
-      .post(MyBackend({ work: "orderbook/" }), data)
+      .post(MyBackend({ work: "orderbook/" }), value)
       .then((res) => {
         console.log(res);
-        <Alert>res.data</Alert>;
+        setErroroccured(true);
+        setVariant("success");
+        setError("Book ordered successfully!");
       })
       .catch((err) => {
-        console.log("The error: ",err);
+        console.log("The error: ", err);
         setErroroccured(true);
+        setVariant("danger");
         setError(err.response.data);
       });
   };
 
+  const valuesetter = (key, value) => {
+    setValue((prev) => {
+      return {
+        ...prev,
+        ...{ [key]: value },
+      };
+    });
+  };
+
   const valuechangehandler = (e) => {
     e.preventDefault();
-    var currDate = new Date();
-    var days = Math.ceil(
-      (new Date(e.target[8].value) - currDate) / 1000 / 60 / 60 / 24
-    );
+    Object.keys(value).forEach((key) => {
+      if (key !== 'bookReturnedDate' && (value[key] === "" || value[key] === null)) {
+        setError("Please fill all values before proceding");
+        setVariant("danger");
+        setErroroccured(true);
+      }
+      return;
+    });
+    var currDate = new Date(new Date().toISOString().split('T')[0]);
+    var days = new Date(value.bookReturnDate) - currDate;
+    days = days / (1000 * 3600 * 24);
+    console.log("BOOK ORDER FORM DATE DIFF", currDate, days, value.bookReturnDate);
     if (days < 0) {
       setError("Date cannot be in the past");
+      setVariant("danger");
       setErroroccured(true);
       return;
     } else if (days === 0) {
       setError("Date cannot be today");
+      setVariant("danger");
       setErroroccured(true);
       return;
     } else if (days > 30) {
       setError("Date cannot be more than 30 days from issue date.");
+      setVariant("danger");
       setErroroccured(true);
       return;
     }
-    var i = 0;
-    var arr = [];
-    while (i < e.target.length - 1) {
-      arr.push(e.target[i].value);
-      i++;
-    }
-    setValue(arr);
-    console.log(arr);
     dbUpdate();
   };
 
   return (
     <Container>
       {erroroccured ? (
-        <ErrorOccured Error={error} Handle={setErroroccured} />
+        <ErrorOccured Error={error} Handle={setErroroccured} variant={variant}/>
       ) : (
         <></>
       )}
       <Form value={value} onSubmit={(e) => valuechangehandler(e)}>
         <Form.Group className="mb-3">
           <Form.Label>Recipient's Name'</Form.Label>
-          <Form.Control type="text" placeholder="Enter name" />
+          <Form.Control
+            type="text"
+            placeholder="Enter name"
+            onChange={(e) => {
+              valuesetter("name", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Address Line 1</Form.Label>
-          <Form.Control type="text" placeholder="Address Line 1" />
+          <Form.Control
+            type="text"
+            placeholder="Address Line 1"
+            onChange={(e) => {
+              valuesetter("addressLine1", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Address Line 2</Form.Label>
-          <Form.Control type="text" placeholder="Address Line 2" />
+          <Form.Control
+            type="text"
+            placeholder="Address Line 2"
+            onChange={(e) => {
+              valuesetter("addressLine2", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>City</Form.Label>
-          <Form.Control type="text" placeholder="City" />
+          <Form.Control
+            type="text"
+            placeholder="City"
+            onChange={(e) => {
+              valuesetter("city", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>State</Form.Label>
-          <Form.Control type="text" placeholder="State" />
+          <Form.Control
+            type="text"
+            placeholder="State"
+            onChange={(e) => {
+              valuesetter("state", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Zip Code</Form.Label>
-          <Form.Control type="text" placeholder="Zip Code" />
+          <Form.Control
+            type="text"
+            placeholder="Zip Code"
+            onChange={(e) => {
+              valuesetter("zip", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Country</Form.Label>
-          <Form.Control type="text" placeholder="Country" />
+          <Form.Control
+            type="text"
+            placeholder="Country"
+            onChange={(e) => {
+              valuesetter("country", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Phone Number</Form.Label>
-          <Form.Control type="text" placeholder="Phone Number" />
+          <Form.Control
+            type="text"
+            placeholder="Phone Number"
+            onChange={(e) => {
+              valuesetter("phone", e.target.value);
+            }}
+          />
         </Form.Group>
         <Form.Group className="mb-3">
           <Form.Label>Book Return Date</Form.Label>
           <Form.Control
             type="date"
             onChange={(e) => {
-              console.log("The date selected is : ");
+              valuesetter("bookReturnDate", new Date(e.target.value).toISOString().split('T')[0]);
             }}
           />
         </Form.Group>

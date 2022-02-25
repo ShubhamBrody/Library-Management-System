@@ -4,6 +4,7 @@ import BookModal from "./BookModal.js";
 import BookOrderForm from "./BookOrderForm.js";
 import BookInformation from "./BookInformation.js";
 import ReorderConfirmation from "./ReorderConfirmation.js";
+import BookReturn from './BookReturn.js';
 
 function BookCard(props) {
   const [modalShow, setModalShow] = useState(false);
@@ -107,7 +108,7 @@ function BookCard(props) {
       <BookModal
         show={modalReturn}
         title={"Return " + props.bookDetails.bookName}
-        element={<BookOrderForm bookDetails={props.bookDetails} />}
+        element={<BookReturn bookDetails={props.bookDetails} />}
         subtitle="Return the book : "
         onHide={() => setModalReturn(false)}
       />

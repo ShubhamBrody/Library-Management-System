@@ -5,20 +5,20 @@ import {MyBackend} from '../../Api/ApiLinkGen';
 import AdminSideBook from '../AdminSideBook/AdminSideBook';
 
 function BookReturns() {
-    const [details, setDetails] = useState([]);
+    const [details, setDetails] = useState(null);
     useEffect(() => {
-        axios.get(MyBackend({work: 'gettodaysbookreturns'}))
+        axios.get(MyBackend({work: 'bookreturns/NONE'}))
         .then((res) => {
-            console.log(res.data);
-            setDetails(res.data);
+            console.log(res.data.results);
+            setDetails(res.data.results);
         })
         .catch((err) => {
             console.log(err);
         })
-        })
+        }, [])
     return (
         <Container>
-            <AdminSideBook details={details}/>
+            {details ? <AdminSideBook details={details}/> : <></>}
         </Container>
     )
 }

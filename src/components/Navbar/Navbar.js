@@ -1,7 +1,6 @@
 import { Navbar, Container, Nav, NavDropdown } from "react-bootstrap";
 import AuthContext from "../store/AuthContext";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 
 function HeadNavbar() {
@@ -15,7 +14,6 @@ function HeadNavbar() {
         <Navbar.Toggle aria-controls="responsive-navbar-nav" />
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link href='/features'>Features</Nav.Link>
             <Nav.Link href='/about'>About</Nav.Link>
           </Nav>
           {authctx.isLoggedIn ? (
@@ -23,12 +21,9 @@ function HeadNavbar() {
               title={authctx.user.username}
               id="collasible-nav-dropdown"
             >
-              <NavDropdown.Item href='/myprofilepage'>
-                My Profile
+              <NavDropdown.Item href={!authctx.isAdmin ? '/myprofilepage' : '/addbook'}>
+                {!authctx.isAdmin ? 'My Profile' : 'Add book to library'}
               </NavDropdown.Item>
-              <NavDropdown.Item href='/myprofilepage'>Books Borrowed</NavDropdown.Item>
-              <NavDropdown.Item href='/'>Register the new Admin</NavDropdown.Item>
-              <NavDropdown.Item href='/'>Something</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item
                 onClick={() => {
