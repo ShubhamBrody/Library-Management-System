@@ -142,7 +142,7 @@ function RegistrationForm() {
             if you have this security key
           </Form.Text>
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+        <Form.Group className="mb-3" controlId="formBasicCheckbox-1">
           <Form.Check
             type="checkbox"
             label="Do you want to recieve mails about new books in your favourite criteria?"
@@ -151,7 +151,7 @@ function RegistrationForm() {
             }}
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicCheckbox">
+        <Form.Group className="mb-3" controlId="formBasicCheckbox-2">
           <Form.Check
             type="checkbox"
             label="New Admin registration?"
