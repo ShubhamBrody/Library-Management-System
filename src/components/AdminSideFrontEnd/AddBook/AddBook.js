@@ -99,7 +99,7 @@ function AddBook() {
                 type="text"
                 placeholder="Author Picture URL"
                 onChange={(val) =>
-                  handler({ base64AuthorImage: val.target.files[0] })
+                  handler({ base64AuthorImage: val.target.value })
                 }
               />
             </FormGroup>
@@ -109,7 +109,7 @@ function AddBook() {
                 type="text"
                 placeholder="Book Picture URL"
                 onChange={(val) =>
-                  handler({ base64BookImage: val.target.files[0] })
+                  handler({ base64BookImage: val.target.value })
                 }
               />
             </FormGroup>
