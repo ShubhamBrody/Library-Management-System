@@ -17,6 +17,8 @@ function IsBookPresent({isbn})
 function MyBackend({work})
 {
     console.log("work", work);
-    return 'https://lms-shubham-backend.herokuapp.com/' + work;
+    return 'http://localhost:8080/' + work;
+    // return 'https://lms-shubham-backend.herokuapp.com/' + work;
+    // return 'https://lms-shubham-backend.herokuapp.com/'
 }
 export {Nytimes, Openlibrary, IsBookPresent, MyBackend};

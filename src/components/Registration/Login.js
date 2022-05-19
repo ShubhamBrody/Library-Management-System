@@ -68,6 +68,7 @@ function Login() {
             arr.push(e.target[i].value);
             i++;
           }
+          console.log(arr);
           arr.push(e.target[i].checked);
           setDetails(arr);
           loginhandler(arr);
