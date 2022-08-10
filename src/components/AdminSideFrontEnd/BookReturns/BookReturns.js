@@ -9,6 +9,7 @@ function BookReturns() {
     useEffect(() => {
         axios.get(MyBackend({work: 'bookreturns/NONE'}))
         .then((res) => {
+            console.log("IN HERE")
             console.log(res.data.results);
             setDetails(res.data.results);
         })

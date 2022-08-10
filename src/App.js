@@ -23,7 +23,6 @@ function App() {
     const user = JSON.parse(window.localStorage.getItem("LMS_USER"));
     console.log("USER : ", user);
     if (!authContext.isLoggedIn && diff < 86400000) {
-      
       axios
         .post(MyBackend({ work: "verifydetails/" }), {
           email: user.email,

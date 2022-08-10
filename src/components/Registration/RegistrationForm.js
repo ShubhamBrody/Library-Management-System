@@ -125,23 +125,6 @@ function RegistrationForm() {
             }}
           />
         </Form.Group>
-        <Form.Group className="mb-3" controlId="formBasicPassword">
-          <Form.Label>Security Key</Form.Label>
-          <Form.Control
-            type="password"
-            placeholder="Security Key"
-            onChange={(e) => {
-              valuesetter("securitykey", e.target.value);
-            }}
-          />
-          <Form.Text style={{ color: "#ffcc00" }}>
-            <span style={{ color: "#cc3300", fontSize: "1.5rem" }}>
-              {" ! "}
-            </span>
-            Please keep the security key safe. You can only change your password
-            if you have this security key
-          </Form.Text>
-        </Form.Group>
         <Form.Group className="mb-3" controlId="formBasicCheckbox-1">
           <Form.Check
             type="checkbox"
